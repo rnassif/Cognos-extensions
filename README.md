@@ -55,7 +55,7 @@ Some of the important properties in this JSON:
 
 **collectionItems**: 
 
->This is where the the dashboard exposes its extension points. Each item in here will have a property called **containerId** that identifies the type of the >dashboard extension. The object will contains various properties that are specific to the type of extension. We will go over this later in this tutorial.
+>This is where the the dashboard exposes its extension points. Each item in here will have a property called **containerId** that identifies the type of the dashboard extension. The object will contains various properties that are specific to the type of extension. We will go over this later in this tutorial.
 
 
 I will cover in the next few sections 3 main dashboard extension points:
@@ -120,11 +120,11 @@ Under the *collectionItems* property, an entry defines the dashboard feature wit
 **'class'**
 
 >This is the path of the feature class. The class file is part of the extension zip file. This path has 3 parts:
->The first part is always the same: **v1/ext/**
->The second part is the name of the feature defined the feature specification: **myFeature**
->The 3rd part is the path to the file in the zip file: **js/features/myDashboardFeature**
+> * The first part is always the same: **v1/ext/**
+> * The second part is the name of the feature defined the feature specification: **myFeature**
+> * The 3rd part is the path to the file in the zip file: **js/features/myDashboardFeature**
 
->Where I have file **myDashboardFeature.js** under the folder **js/features** in my zip extension zip file.
+> Where I have file **myDashboardFeature.js** under the folder **js/features** in my zip extension zip file.
 
 
 **'dependencies'**
