@@ -162,18 +162,19 @@ class MyFeature {
 		 *
 		 */
 		constructor(options) {
-      // In the json example above, I defined a dependency on the Canvas API. I can access it here using:
-      //  options.features['Canvas']
-      
-      // Also, since the Transaction API is defined under the runtimeDependencies, I cannot use it in the constructor or the initialize function.
-      // But it can be accessed in any other function in this class.
+		      // In the json example above, I defined a dependency on the Canvas API. I can access it here using:
+		      //  options.features['Canvas']
+
+		      // Also, since the Transaction API is defined under the runtimeDependencies, I cannot use it in the constructor or the initialize function.
+		      // But it can be accessed in any other function in this class.
 		}
 	
 		/**
 		 * 
 		 * By default, the feature instance will only be created when the feature is used by other features or widgets. 
 		 * This means that if no widget or feature accesses this feature, then it will not be created.
-		 * There are certain situations where you want the feature to be created and do some work even if it is not being referenced by other features or widgets.
+		 * There are certain situations where you want the feature to be created and do some work even if it 
+		 * is not being referenced by other features or widgets.
 		 * This function here can be used to force the creation of the instance and you can do any initialization work here.
 		 * 
 		 * Defining this function will force create your feature object whether it is being referenced or not.
