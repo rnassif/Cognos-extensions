@@ -60,14 +60,14 @@ Some of the important properties in this JSON:
 
 I will cover in the next few sections 3 main dashboard extension points:
 
-* Dashboard features
+* [Dashboard features](#dashboard_features)
 
-* Content features
+* [Content features](#content_features)
 
-* Custom content
+* [Custom content](#custom_content)
 
 
-## Dashboard Features
+## <a name="dashboard_features"></a> Dashboard Features
 
 A dashboard feature is a piece of code (i.e. javascript class) that is registered with the dashboard. An instance of the feature class will be created as part of the life cycle of the dashboard. Only one instance of this feature will exist per dashboard instance.
 
@@ -214,7 +214,7 @@ class MyFeature {
 	}
 ```
 
-## Dashboard Content Features
+## <a name="content_features"></a> Dashboard Content Features
 
 A dashboard content is any content that is part of the dashboard canvas. This could be a tab control, a page, a widget, a group, etc.. Bascially any object that is part of the dashboard. 
 
@@ -393,3 +393,6 @@ class MyFeature {
 	} 
 
 ```
+
+
+## <a name="custom_content"></a> Custom Content
