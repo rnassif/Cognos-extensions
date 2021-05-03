@@ -396,3 +396,105 @@ class MyFeature {
 
 
 ## <a name="custom_content"></a> Custom Content
+
+
+
+**This collection replaces the existing custom widget collection "com.ibm.bi.dashboard.widgets"**
+
+The documented way for adding custom widgets in the dashboard is described here:
+
+https://www.ibm.com/docs/tr/cognos-analytics/11.1.0?topic=extensions-adding-dashboard-widget
+
+While this method works fine, it is limited that it will not give access to the dashboard API to the newly added custom widget code.
+In order to add a new custom content or widget that can access the existing dashboard API, you need to use the new collection **com.ibm.bi.dashboard.contentTypes** instead of **com.ibm.bi.dashboard.widgets**
+
+This new collection **com.ibm.bi.dashboard.contentTypes** is provisional and it might change in future releases.
+
+The new content type will show up under the custom widget panel and can be added to the canvas (A potential defect that exists in the current product that might prevent drag&drop to work when adding the widget. Instead, simply click on the widget and it will be added to the dashboard). 
+
+### Example
+The following json, contributes a new widget that will show up the custom widget panel. The widget webcontent (including the javascript class file and image)  must be zipped with the json file.
+
+This example adds a new custom content with some properties will be exposed in the properties pane.
+
+The dependencies array under "renderer" can be used to access any dashboard feature API that is required. In the following example, the widget is using the dashboard Canvas API.
+
+```javascript 
+
+{
+    "name": "myCustomContent",
+    "schemaVersion": "1.0",
+    "extensions": [
+      {
+        "perspective": "dashboard",
+        "comment": "Extension that adds a new widget to the dashboard",
+        "features": [
+          {
+            "id": "myNewWidget",
+            "collectionItems": [{
+                "containerId": "com.ibm.bi.dashboard.contentTypes",
+                "id": "myCustomContentID",
+                "type": "myCustomButton",
+                "iconUrl": "v1/ext/myCustomContent/images/myIcon.svg",
+                "expose": true,
+                "name": "Sample button",
+                "propertyLayoutList": [{
+                    "type": "Section",
+                    "id": "my_settings",
+                    "label": "My options",
+                    "position": 0
+                }],
+                "propertyList": [{
+                    "id": "myInputProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "InputLabel",
+                            "label": "my input"
+        
+                        }
+                    }
+                }, {
+                    "id": "myToggleProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "ToggleButton",
+                            "label": "my toggle"
+        
+                        }
+                    }
+                }, {
+                    "id": "myDropDownProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "DropDown",
+                            "label": "My dropdown options",
+                            "options": [{
+                                "label": "Option 1",
+                                "value": "option1"
+                            },{
+                                "label": "Option 2",
+                                "value": "option2"
+                            },{
+                                "label": "Option 3",
+                                "value": "option3"
+                            }]
+                        }
+                    }
+                }],
+                "renderer": {
+                    "class": "v1/ext/myCustomContent/js/MyCustomWidget",
+                    "dependencies": ["Dashboard.Canvas"]
+                },
+                "capabilities": {
+                    "selection": true
+                }
+            }]
+          }
+        ]
+      }
+    ]
+  }
+```
