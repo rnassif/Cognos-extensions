@@ -75,6 +75,8 @@ A feature can define a list of other required features that it depends on. The r
 
 ### Example
 
+**Note:** The syntax of the JSON under *collectionItems* is provisional and might slightly change in future releases.
+
 
 ```javascript 
 
@@ -93,6 +95,7 @@ A feature can define a list of other required features that it depends on. The r
 				"class": "v1/ext/myFeature/js/features/myDashboardFeature",
 				"dependencies":["Canvas"],
 				"runtimeDependencies":["Transaction"],
+				"profiles": ["consume"]
 			}]
 		  }]
 	}]
@@ -100,7 +103,9 @@ A feature can define a list of other required features that it depends on. The r
 ```
 
 
-Here is the documentation of the various properties in the json spec under the *collectionItems* property:
+Under the *collectionItems* property, an entry defines the dashboard feature with the following attributes:
+
+
 
 **'containerId'** 
 
@@ -146,6 +151,13 @@ Here is the documentation of the various properties in the json spec under the *
 >In this example, my custom feature needs to access the dashboard Transaction API.
 
 
+**'profiles'**
+> Indicates when the feature is used. Possible values are:
+> * 'consume': The feature is needed when the dashboard is in view mode
+> * 'authoring' : The feature is only needed when the dashboad is in edit mode
+
+> Most likely the value you want here is 'consume' unless your feature to only be available when the dashboard is in edit mode.
+
 
 
 ### Class example
@@ -157,7 +169,7 @@ class MyFeature {
 
 		/**
 		 * 
-		 * @param {*} options.params map that contains the list of features defined 
+		 * @param {*} options.features map that contains the list of features defined 
 		 * in both the dependencies and runtimeDependencies lists
 		 *
 		 */
@@ -202,5 +214,182 @@ class MyFeature {
 	}
 ```
 
-----
+## Dashboard Content Features
 
+A dashboard content is any content that is part of the dashboard canvas. This could be a tab control, a page, a widget, a group, etc.. Bascially any object that is part of the dashboard. 
+
+A content feature is a piece of code (i.g. class) that is registered with the dashboard. An instance of the content feature class will be created as part of the life cycle of each content in the dashboard canvas. A different instance of the feature will be created for every content instance in the canvas.
+
+For example, if I have a dashboard with 5 widgets and I have a content feature registered with those widgets, then 5 instances of the feature will be created. Each instance of the feature will receive the instance of the content that it is associated with.
+
+The feature can define a list of required features that it depends on. Content features can expose their own API that other feature can consume and use.
+
+
+### Example
+
+The following json, contributes a new content feature. It is very similar to the dashboard feature, with an additional *type* attribute that indicate which content type the feature is associated with.
+
+
+
+```javascript 
+
+{
+	"name": "myFeature",
+	"comment": "The NAME of the extension, specified above, is very important.",
+	"schemaVersion": "2.0",
+	"extensions": [{
+		"perspective":"dashboard",
+		"features": [ {
+			"id": "com.ibm.dashboard.myFeature",
+			"collectionItems": [{
+				"containerId": "com.ibm.bi.dashboard.content-features",
+				"name": "myContentFeature",
+				"id": "dashboard.myContentFeature",
+				"class": "v1/ext/myFeature/js/features/myContentFeature",
+				"dependencies":["state"],
+				"runtimeDependencies":["Dashboard.Transaction"],
+				"types":["widget.text", "widget.live", "page"],
+				"profiles":["consume"]
+			}]
+		  }]
+	}]
+}
+```
+Here is the documentation of the various properties in the json spec:
+
+
+
+
+**'containerId'** 
+
+>The value ***com.ibm.bi.dashboard.features*** tells the dashboard application that this entry represents a dashboard feature.
+
+
+**'name'** 
+
+>This is the name of the feature that will be used to access its API (if any)
+
+
+**'class'**
+
+>This is the path of the feature class. The class file is part of the extension zip file. This path has 3 parts:
+>The first part is always the same: **v1/ext/**
+>The second part is the name of the feature defined the feature specification: **myFeature**
+>The 3rd part is the path to the file in the zip file: **js/features/myDashboardFeature**
+
+>Where I have file **myDashboardFeature.js** under the folder **js/features** in my zip extension zip file.
+
+
+**'dependencies'**
+
+>This is the list of dependencies that the feature depends on. 
+>This dependency list will make sure that the the required features
+>are created and ready and can be accessed in the constructor of the feature.
+>This dependency list should only be used when you need to access certain 
+>feature in the constructor. Adding dependencies in this list will have some 
+>performance implications since it will block the creation of the feature until 
+>all its required features are created and initialized.
+
+>In this example, my custom feature needs to access the content state API.
+>In order to require a dashboard level feature, the feature name must be prefixed with "Dashboard.". 
+For example, "Dashboard.Transaction"
+
+
+**'runtimeDependencies'** 
+
+>This is the same as the dependencies list, but it will only make the features available
+>when used in any method expect the constructor. If the feature is accessed in the constructor,
+>an exception will be thrown. It is better to use this list when you don't need to access the 
+>required feature in your constructor.
+
+>In this example, my custom feature needs to access the dashboard Transaction API.
+>In order to require a dashboard level feature, the feature name must be prefixed with "Dashboard.". 
+For example, "Dashboard.Transaction"
+
+
+**'profiles'**
+> Indicates when the feature is used. Possible values are:
+> * 'consume': The feature is needed when the dashboard is in view mode
+> * 'authoring' : The feature is only needed when the dashboad is in edit mode
+
+> Most likely the value you want here is 'consume' unless your feature to only be available when the dashboard is in edit mode.
+
+
+
+**"types"**
+
+>The list of content types that this feature will be associated with. 
+>
+>If no types are defined, the feature will be available for any type.
+
+>An example of a type:
+```
+ 'widget' : Any widget in the canvas
+ 'widget.<widgetType>' : A specific type of widget where <widgetType> could be something like 
+	'shape' - Shape widget 
+	'live' - Visualization
+	'text' - Text widget
+	'media' - Media widget
+	'webpage' - webpage
+	'image' - image
+ 'page': A page object
+
+```
+
+
+### Class example
+
+```javascript
+
+class MyFeature {
+
+
+		/**
+		 * 
+		 * @param {*} options.features - A Map that contains the list of features defined 
+		 * in both the dependencies and runtimeDependencies lists
+		 * @param {*} options.content - A reference to the content API associated with this feature
+		 * 
+		 *
+		 */
+		constructor(options) {
+		      // In the json example above, I defined a dependency on the conent state API. I can access it here using:
+		      //  options.features['state']
+
+		      // Also, since the Transaction API is defined under the runtimeDependencies, I cannot use it in the constructor or the initialize function.
+		      // But it can be accessed in any other function in this class.
+		}
+	
+		/**
+		 * 
+		 * By default, the feature instance will only be created when the feature is used by other features or widgets. 
+		 * This means that if no widget or feature accesses this feature, then it will not be created.
+		 * There are certain situations where you want the feature to be created and do some work even if it 
+		 * is not being referenced by other features or widgets.
+		 * This function here can be used to force the creation of the instance and you can do any initialization work here.
+		 * 
+		 * Defining this function will force create your feature object whether it is being referenced or not.
+		 * 
+		 */
+		initialize() {
+		}
+		
+
+		/**
+		 * Return the feature API (if any) to be exposed to other features
+		 * 
+		 */
+		getAPI() {
+			return {
+				someAPIFunction: function() {}
+			}
+		}
+	
+		/**
+		 * Called when the dashbaord is closed
+		 */
+		destroy() {
+		}   
+	} 
+
+```
