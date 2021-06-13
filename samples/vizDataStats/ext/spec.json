@@ -1,6 +1,6 @@
 {
 	"name": "vizDataStats",
-	"comment": "The NAME of the extension, specified above, is very important.",
+	"comment": "The NAME of the extension, specified above, is very important. It is used in the path when referencing any file packaged with this extension",
 	"schemaVersion": "2.0",
 	"extensions": [{
 		"perspective":"dashboard",
