@@ -1,0 +1,33 @@
+.vizDataStats {
+    background-color: white;
+    padding: 5px;
+    overflow: auto;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    overflow: auto;
+}
+
+.vizDataStats .header {
+    font-weight: bold;
+}
+
+.vizDataStats>.header {
+    font-size: 16px;
+}
+
+.vizDataStats .section{
+    display: flex;
+}
+
+
+.vizDataStats .section .stat {
+    flex: 1;
+    padding: 5px;
+}
+
+.vizDataStats .section .stat .header{
+    text-decoration: underline;
+}

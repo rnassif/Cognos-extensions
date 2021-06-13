@@ -1,0 +1,43 @@
+{
+	"name": "vizDataStats",
+	"comment": "The NAME of the extension, specified above, is very important.",
+	"schemaVersion": "2.0",
+	"extensions": [{
+		"perspective":"dashboard",
+		"features": [ {
+			"id": "com.ibm.dashboard.VizDataStats",
+			"cssStyles": ["v1/ext/vizDataStats/css/vizDataStats.css"],
+			"collectionItems": [{
+				"containerId": "com.ibm.bi.dashboard.content-features",
+				"types":["widget.live"],
+				"name":"VizDataStats",
+				"id":"com.ibm.bi.dashboard.content-features.VizDataStats",
+				"class":"v1/ext/vizDataStats/js/VizDataStatsFeature",
+				"runtimeDependencies": ["DataQueryExecution"],
+				"profiles": [
+					"consume"
+				]
+			}, {
+				"containerId": "com.ibm.bi.dashboard.contentTypes",
+				"id": "widget.visDataStats",
+				"iconUrl": "v1/ext/vizDataStats/images/icon.svg",
+				"type": "VizStats",
+				"expose": true,
+				"name": "Visualization stats",
+				"propertyLayoutList": [{
+					"type": "Section",
+					"id": "control_settings",
+					"label": "Options",
+					"position": 0
+				}],
+				"renderer": {
+					"class": "v1/ext/vizDataStats/js/StatsRenderer",
+					"dependencies": ["Dashboard.Canvas"]
+				},
+				"capabilities": {
+					"selection": true
+				}
+			}]
+		  }]
+	}]
+}
