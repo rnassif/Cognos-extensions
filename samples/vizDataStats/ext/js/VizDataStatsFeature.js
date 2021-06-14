@@ -1,58 +1,65 @@
+define([], function () {
+    'use strict';
+    class VizStats {
 
-define([], function() {
-	'use strict';
-	class VizStats {
-
-		/**
-		 * 
-		 * @param {*} options.params map that contains the list of features defined 
-		 * in both the dependencies and runtimeDependencies lists
-		 *
-		 */
-		constructor(options) {
+        /**
+         * 
+         * @param {*} options.params map that contains the list of features defined 
+         * in both the dependencies and runtimeDependencies lists
+         *
+         */
+        constructor(options) {
             // This map contains the list of features listed as dependencies.
-            this.features =  options.features;
-		}
-	
+            this.features = options.features;
+        }
 
-		/**
-		 * Return the feature API interface
-		 * 
-		 */
-		getAPI() {
-			return {
-				getStats: () => this.getStats()
-			}
-		}
-	
+
+        /**
+         * Return the feature API interface
+         * 
+         */
+        getAPI() {
+            return {
+                getStats: () => this.getStats()
+            }
+        }
+
         /**
          * 
          * Calculate some basic data statistics, like minimum, maximum and average.
          * 
          */
         getStats() {
-           const queryResult = this.features['DataQueryExecution'].getCurrentQueryResults().getResult();            
+            const queryResult = this.features['DataQueryExecution'].getCurrentQueryResults().getResult();
             // Find the column index for the facts in the result
-           const indexMap = this.getFactAndAttributeIndexMap(queryResult.getResultItemList())
-     
-           // get the fact data
-           const factsDataMap = this.getFactDataMap (queryResult, indexMap.factsIndexMap);
+            const indexMap = this.getFactAndAttributeIndexMap(queryResult.getResultItemList())
 
-           const stats = {};
-           for (let label in factsDataMap) {
-               const dataArray = factsDataMap[label];
+            // get the fact data
+            const factsDataMap = this.getFactDataMap(queryResult, indexMap.factsIndexMap);
 
-               const minValue = Math.min.apply(null, dataArray);
-               const attributesWithMinValue = this.getAttributeLabelForRowIndex(indexMap.attributesIndexMap, queryResult, dataArray.indexOf(minValue));
+            const stats = {};
+            for (let label in factsDataMap) {
+                const dataArray = factsDataMap[label];
 
-               const maxValue = Math.max.apply(null, dataArray) 
-               const attributesWithMaxValue = this.getAttributeLabelForRowIndex(indexMap.attributesIndexMap, queryResult, dataArray.indexOf(maxValue));
+                const minValue = Math.min.apply(null, dataArray);
+                const attributesWithMinValue = this.getAttributeLabelForRowIndex(indexMap.attributesIndexMap, queryResult, dataArray.indexOf(minValue));
 
-               stats[label] = {
-                   min: { value: minValue, attributesLabel: attributesWithMinValue},
-                   max: { value: maxValue, attributesLabel: attributesWithMaxValue} ,
-                   avg: { value: dataArray.reduce((a,b)=> a+b, 0) / dataArray.length}
-               };
+                const maxValue = Math.max.apply(null, dataArray)
+                const attributesWithMaxValue = this.getAttributeLabelForRowIndex(indexMap.attributesIndexMap, queryResult, dataArray.indexOf(maxValue));
+
+                stats[label] = {
+                    min: {
+                        value: minValue,
+                        attributesLabel: attributesWithMinValue
+                    },
+                    max: {
+                        value: maxValue,
+                        attributesLabel: attributesWithMaxValue
+                    },
+                    avg: {
+                        value: dataArray.reduce((a, b) => a + b, 0) / dataArray.length
+                    }
+                };
             }
             return stats;
         }
@@ -62,17 +69,17 @@ define([], function() {
          * Create a label that contains all the attributes at given row index.
          * 
          */
-        getAttributeLabelForRowIndex(attributesIndexMap, queryResult, rowIndex){
+        getAttributeLabelForRowIndex(attributesIndexMap, queryResult, rowIndex) {
             const values = [];
-            for(let label in attributesIndexMap) {
+            for (let label in attributesIndexMap) {
                 // remember, an attribute might contain multiple tuples, so the value is an array;
                 const valueTuple = queryResult.getValue(rowIndex, attributesIndexMap[label]);
                 if (valueTuple) {
-                    values.push(valueTuple.map(value => value.label).join() );
+                    values.push(valueTuple.map(value => value.label).join());
                 }
-                
+
             }
-           return values.join();
+            return values.join();
         }
 
         /**
@@ -89,16 +96,16 @@ define([], function() {
                 // A query item is a tuple that might contain multiple dataitem. Depending on the visualization, but in most case, it is only one data item
                 const isTheQueryItemAnAttribute = !!dataItemList.find((dataItem) => dataItem.getType() === 'attribute');
                 const label = dataItemList.map(dataItem => dataItem.getLabel()).join();
-                if (isTheQueryItemAnAttribute){
-                    attributesIndexMap[label]  = index;  
+                if (isTheQueryItemAnAttribute) {
+                    attributesIndexMap[label] = index;
                 } else {
                     // If the query item is a fact, it is safe to say that it contains one dataItem.
-                    factsIndexMap[label]  = index;
+                    factsIndexMap[label] = index;
                 }
 
             });
 
-            return  { 
+            return {
                 factsIndexMap: factsIndexMap,
                 attributesIndexMap: attributesIndexMap
             }
@@ -114,23 +121,22 @@ define([], function() {
             for (let label in factsIndexMap) {
                 factDataMap[label] = [];
                 const columnIndex = factsIndexMap[label];
-                for (let i = 0 ; i < rowCount; i++){
-                    const value = queryResult.getValue(i, columnIndex ).value;
+                for (let i = 0; i < rowCount; i++) {
+                    const value = queryResult.getValue(i, columnIndex).value;
                     if (value != null) {
                         factDataMap[label].push(value);
                     }
-                    
+
                 }
             }
 
             return factDataMap;
         }
 
-		/**
-		 * Called when the dashboard is closed
-		 */
-		destroy() {
-		}   
-	}
-	return 	VizStats;
+        /**
+         * Called when the dashboard is closed
+         */
+        destroy() {}
+    }
+    return VizStats;
 });
