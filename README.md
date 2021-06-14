@@ -353,7 +353,7 @@ class MyFeature {
 		 *
 		 */
 		constructor(options) {
-		      // In the json example above, I defined a dependency on the conent state API. I can access it here using:
+		      // In the json example above, I defined a dependency on the content state API. I can access it here using:
 		      //  options.features['state']
 
 		      // Also, since the Transaction API is defined under the runtimeDependencies, I cannot use it in the constructor or the initialize function.
@@ -386,7 +386,7 @@ class MyFeature {
 		}
 	
 		/**
-		 * Called when the dashbaord is closed
+		 * Called when the dashboard is closed
 		 */
 		destroy() {
 		}   
@@ -572,5 +572,46 @@ For example, "Dashboard.Transaction"
 For example, "Dashboard.Transaction"
 
 
+### Class example
+
+```javascript
+
+class MyCustomWidget {
+
+
+		/**
+		 * 
+		 * @param {*} options.features - A Map that contains the list of features defined 
+		 * in both the dependencies and runtimeDependencies lists
+		 * @param {*} options.content - A reference to the content API associated with this feature
+		 * 
+		 *
+		 */
+		constructor(options) {
+		      // In the json example above, I defined a dependency on the Canvas API. I can access it here using:
+		      //  options.features['Dashboad.Canvas']
+		}
+	
+
+		/**
+		 * Return the renderer API used to render this custom content
+		 * 
+		 */
+		getAPI() {
+			return {
+				render: function(option) {
+					// option.parent is the node where we can add some html
+				}
+			}
+		}
+	
+		/**
+		 * Called when the dashboard is closed
+		 */
+		destroy() {
+		}   
+	} 
+
+```
 
 
