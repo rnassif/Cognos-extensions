@@ -497,4 +497,80 @@ The dependencies array under "renderer" can be used to access any dashboard feat
       }
     ]
   }
-```
+```  
+  
+**'containerId'** 
+
+>The value ***om.ibm.bi.dashboard.contentTypes*** tells the dashboard application that this entry represents a content type definition.
+
+**'id'** 
+
+>The content identifier
+
+**'type'** 
+
+>The content type. This is the value used to identify the type of the content when registering content features.
+
+**'iconUrl'** 
+
+>The icon to be display in the widget panel in the dashboard
+
+**'expose'** 
+
+>Indicate whether to expose this custom widget entry in the custom wiget panel or not. There might be cases where the custom widget is only used internally and created using the APIs. In this case, expose can be set to false.
+
+
+**'name'** 
+
+>The name to be display in the widget panel
+
+
+**'propertyList'** 
+
+>The list of properties that this content depends on. The properties can define an editor, and this will show the property editor in the properties panel so that the auther can change the properties. The custom widget can access the properties value using the content API .
+
+
+**'name'** 
+
+>The name to be display in the widget panel
+
+
+**'renderer/class'**
+
+>This is the path of the renderer class. The class file is part of the extension zip file. This path has 3 parts:
+>The first part is always the same: **v1/ext/**
+>The second part is the name of the feature defined the feature specification: **myCustomContent**
+>The 3rd part is the path to the file in the zip file: **js/MyCustomWidget**
+
+>Where I have file **MyCustomWidget.js** under the folder **js/** in my zip extension zip file.
+
+
+**'renderer/dependencies'**
+
+>This is the list of dependencies that the renderer depends on. 
+>This dependency list will make sure that the the required features
+>are created and ready and can be accessed in the constructor of the feature.
+>This dependency list should only be used when you need to access certain 
+>feature in the constructor. Adding dependencies in this list will have some 
+>performance implications since it will block the creation of the feature until 
+>all its required features are created and initialized.
+
+>In this example, my custom feature needs to access the content state API.
+>In order to require a dashboard level feature, the feature name must be prefixed with "Dashboard.". 
+For example, "Dashboard.Transaction"
+
+
+**'renderer/runtimeDependencies'** 
+
+>This is the same as the dependencies list, but it will only make the features available
+>when used in any method expect the constructor. If the feature is accessed in the constructor,
+>an exception will be thrown. It is better to use this list when you don't need to access the 
+>required feature in your constructor.
+
+>In this example, my custom feature needs to access the dashboard Transaction API.
+>In order to require a dashboard level feature, the feature name must be prefixed with "Dashboard.". 
+For example, "Dashboard.Transaction"
+
+
+
+
