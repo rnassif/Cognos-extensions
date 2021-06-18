@@ -1,0 +1,76 @@
+{
+    "name": "myCustomContent",
+    "schemaVersion": "1.0",
+    "extensions": [
+      {
+        "perspective": "dashboard",
+        "comment": "Extension that adds a new widget to the dashboard",
+        "features": [
+          {
+            "id": "myNewWidget",
+            "collectionItems": [{
+                "containerId": "com.ibm.bi.dashboard.contentTypes",
+                "id": "myCustomContentID",
+                "type": "myCustomButton",
+                "iconUrl": "v1/ext/myCustomContent/images/myIcon.svg",
+                "expose": true,
+                "name": "Sample button",
+                "propertyLayoutList": [{
+                    "type": "Section",
+                    "id": "my_settings",
+                    "label": "My options",
+                    "position": 0
+                }],
+                "propertyList": [{
+                    "id": "myInputProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "InputLabel",
+                            "label": "my input"
+        
+                        }
+                    }
+                }, {
+                    "id": "myToggleProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "ToggleButton",
+                            "label": "my toggle"
+        
+                        }
+                    }
+                }, {
+                    "id": "myDropDownProperty",
+                    "editor": {
+                        "sectionId": "general.my_settings",
+                        "uiControl": {
+                            "type": "DropDown",
+                            "label": "My dropdown options",
+                            "options": [{
+                                "label": "Option 1",
+                                "value": "option1"
+                            },{
+                                "label": "Option 2",
+                                "value": "option2"
+                            },{
+                                "label": "Option 3",
+                                "value": "option3"
+                            }]
+                        }
+                    }
+                }],
+                "renderer": {
+                    "class": "v1/ext/myCustomContent/js/MyCustomWidget",
+                    "dependencies": ["Dashboard.Canvas"]
+                },
+                "capabilities": {
+                    "selection": true
+                }
+            }]
+          }
+        ]
+      }
+    ]
+  }
