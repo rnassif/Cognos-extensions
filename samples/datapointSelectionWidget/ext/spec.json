@@ -1,0 +1,36 @@
+{
+	"name": "datapointSelectionWidget",
+	"comment": "The NAME of the extension, specified above, is very important. It is used in any path(i.e. class path) referenced in this spec ",
+	"schemaVersion": "2.0",
+	"extensions": [{
+		"perspective":"dashboard",
+		"features": [ {
+			"id": "com.ibm.dashboard.datapointSelectionWidget",
+			"cssStyles": ["v1/ext/datapointSelectionWidget/css/datapointSelectionWidget.css"],
+			"collectionItems": [{
+				"containerId": "com.ibm.bi.dashboard.contentTypes",
+				"id": "widget.datapointSelectionWidget.renderer",
+				"type": "datapointSelectionWidget",
+				"expose": true,
+				"name": "Datapoint iframe widget",
+				"propertyList": [{
+					"id": "url",
+					"editor": {
+						"sectionId": "general",
+						"uiControl": {
+							"type": "InputLabel",
+							"label": "Url"
+						}
+					}
+				}],
+				"renderer": {
+					"class": "v1/ext/datapointSelectionWidget/js/features/Renderer",
+					"dependencies" : ["Dashboard.Canvas"]
+				},
+				"capabilities": {
+					"selection": true
+				}
+			}]
+		  }]
+	}]
+}

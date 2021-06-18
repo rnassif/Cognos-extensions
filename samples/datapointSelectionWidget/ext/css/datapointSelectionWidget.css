@@ -1,0 +1,17 @@
+.content.datapointSelectionWidget {
+  background-color: white;
+}
+
+.content.datapointSelectionWidget>iframe{
+   height:100%;
+   width: 100%;
+   border-width: 0px;
+}
+
+.authoringMode .content.datapointSelectionWidget>iframe{
+  pointer-events: none;
+}
+
+.authoringMode .content.datapointSelectionWidget.nodeSelected>iframe{
+   pointer-events: all;
+ }
